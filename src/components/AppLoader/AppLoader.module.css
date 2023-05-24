@@ -1,0 +1,26 @@
+.loaderWrapper {
+    display: flex;
+    align-items: center;
+    height: 50vh;
+}
+
+.loader {
+    width: 150px;
+    height: 150px;
+    background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='100' ry='100' stroke='%2324292FFF' stroke-width='11' stroke-dasharray='15%2c 15%2c 1' stroke-dashoffset='0' stroke-linecap='round'/%3e%3c/svg%3e");
+    border-radius: 100px;
+    margin: 0 auto;
+    animation: rotate 4s infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
