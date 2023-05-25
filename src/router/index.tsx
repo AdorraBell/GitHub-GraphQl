@@ -10,7 +10,7 @@ export interface IRoute {
 
 export enum RouteNames {
     MAIN_PAGE = '/',
-    DETAIL_PAGE = '/detail/:id'
+    DETAIL_PAGE = '/detail/:owner/:repo'
 }
 
 export const publicRoutes: IRoute[] = [

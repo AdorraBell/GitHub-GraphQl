@@ -1,18 +1,41 @@
-import { FC, useState } from "react";
-import AppLoader from "src/components/AppLoader/AppLoader";
-import SearchRepoBlock from "src/components/SearchRepoBlock/SearchRepoBlock";
-
-import BaseLayout from "src/layout/BaseLayout/BaseLayout";
+import { useQuery } from "@apollo/client"
+import { FC, useEffect } from "react"
+import AppLoader from "src/components/AppLoader/AppLoader"
+import SearchRepoBlock from "src/components/SearchRepoBlock/SearchRepoBlock"
+import BaseLayout from "src/layout/BaseLayout/BaseLayout"
+import {GET_CURRENT_USER_INFO} from "src/graphQl/query/currentUser"
+import { useActions } from "src/hooks/useActions"
+import { useTypedSelector } from "src/hooks/useTypedSelector"
+import ListOfRepos from "src/components/ListOfRepos/ListOfRepos"
 
 const MainPage: FC = () => {
 
-    const [isSearching, setIsSearching] = useState(false);
+    const {setUser} = useActions();
+    const {reposData} = useTypedSelector(state => state.currentUser);
+    
+    const currentUserData = useQuery(GET_CURRENT_USER_INFO, {
+        variables: {
+            userName: "AdorraBell"
+        }
+    });
+
+    useEffect(() => {
+        const user = currentUserData.data?.user;
+        if(user){
+            setUser(user.login, user.avatarUrl, user.url, user.repositories, true)
+        }
+    }, [currentUserData.data])
+
 
     return ( 
         <BaseLayout>
             <SearchRepoBlock />
-                {isSearching &&
+                {currentUserData.loading &&
                     <AppLoader />
+                }
+                {reposData.edges !== undefined &&
+                    <ListOfRepos 
+                        reposList={reposData.edges} />
                 }
         </BaseLayout>
     );

@@ -3,13 +3,17 @@ import styles from "src/components/AppSearch/AppSerach.module.css"
 import SearchIcon from "src/components/UI/SearchIcon";
 import { useDebounce } from "src/hooks/useDebounce";
 
-const AppSearch: FC = () => {
+interface AppSearchProps {
+    searchData: (e: string) => void
+}
+
+const AppSearch: FC<AppSearchProps> = ({searchData}) => {
 
     const search = (e: string) => {
-        console.log(e);
+        searchData(e);
     }
 
-    const debounsedSearch = useDebounce(search, 1000);
+    const debounsedSearch = useDebounce(search, 700);
 
     const inputChanged = (e: ChangeEvent<HTMLInputElement>) => {
         debounsedSearch(e.currentTarget.value)

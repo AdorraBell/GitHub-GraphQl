@@ -1,0 +1,23 @@
+
+.userUI {
+    display: flex;
+    align-items: center;
+}
+
+.userUI__userIcon {
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-right: 10px;
+    background-color: rgb(205, 205, 205);
+}
+
+.userUI__username {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.userUI__userIcon img {
+    max-width: 100%;
+}

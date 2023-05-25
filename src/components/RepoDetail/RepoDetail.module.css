@@ -1,0 +1,25 @@
+
+.repoDetail {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.boldText {
+    font-weight: 500;
+}
+
+.repoDetail__titleH2 {
+    margin: 30px auto;
+    text-align: center;
+}
+
+.repoDetail__line {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.repoDetail__titleH3 {
+    margin: 20px auto;
+}

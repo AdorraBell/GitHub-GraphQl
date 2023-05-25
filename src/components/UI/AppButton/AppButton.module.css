@@ -1,0 +1,17 @@
+
+.defaultBtn {
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.brownButton {
+    background: #24292f;
+    color: #ffffff;
+}
+
+.brownOutlineButton {
+    border: 2px solid #24292f;
+    color: #24292f;
+    
+}

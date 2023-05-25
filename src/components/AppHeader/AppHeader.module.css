@@ -1,16 +1,14 @@
 .header {
-    padding: 20px 30px;
+    padding: 0 30px;
     background: #24292f;
     border-radius: 5px 5px 0 0;
+    height: 62px;
+    box-sizing: border-box;
+    color: #ffffff;
 }
 
 .header__content {
+    height: 100%;
     display: flex;
     justify-content: flex-end;
-}
-
-.header__username {
-    color: #ffffff;
-    font-weight: bold;
-    cursor: pointer;
 }
