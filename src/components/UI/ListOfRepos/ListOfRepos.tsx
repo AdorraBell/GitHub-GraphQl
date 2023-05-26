@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { IEdge } from "src/types/types"
-import RepoBlock from "../UI/RepoBlock/RepoBlock";
+import RepoBlock from "src/components/UI/RepoBlock/RepoBlock";
 
 interface ListOfReposProps {
     reposList: IEdge[]

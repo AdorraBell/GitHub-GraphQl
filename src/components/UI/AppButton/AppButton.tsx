@@ -8,13 +8,16 @@ type ButtonTypes = 'button' | 'submit';
 interface AppButtonProps {
     type: ButtonTypes,
     children: string,
-    variant: BtnClassVariants
+    variant: BtnClassVariants,
+    onClick: (id: number | null) => void,
+    id?: number
 }
 
-const AppButton: FC<AppButtonProps> = ({type, children, variant}) => {
+const AppButton: FC<AppButtonProps> = ({type, children, variant, onClick, id}) => {
     
     const [btnClass, setBtnClass] = useState('');
     const btnClasses = styles.defaultBtn  +  ' ' + btnClass;
+    const btnClicked = () => onClick(id || null)
 
     const btnSelectClass = (variant: string) => {
         switch(variant){
@@ -30,12 +33,11 @@ const AppButton: FC<AppButtonProps> = ({type, children, variant}) => {
         btnSelectClass(variant);
     }, [])
 
-    console.log(btnClasses)
-
     return ( 
         <button 
             type={type} 
-            className={btnClasses} >
+            className={btnClasses} 
+            onClick={btnClicked} >
             {children}
         </button>
     );

@@ -1,10 +1,10 @@
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { useParams } from "react-router"
 import RepoDetail from "src/components/RepoDetail/RepoDetail"
 import BaseLayout from "src/layout/BaseLayout/BaseLayout"
 import {GET_REPO_DETAILS} from "src/graphQl/query/repoDetails"
 import { useQuery } from "@apollo/client"
-import AppLoader from "src/components/AppLoader/AppLoader"
+import LoaderApp from "src/components/UI/LoaderApp/LoaderApp"
 
 const DetailPage: FC = () => {
 
@@ -18,16 +18,10 @@ const DetailPage: FC = () => {
         }
     })
 
-    useEffect(() => {
-        console.log(repoDetails.data?.repository);
-    }, [repoDetails])
-
-    
-
     return ( 
         <BaseLayout>
             {repoDetails.loading ?
-                <AppLoader />
+                <LoaderApp />
             :
                 <RepoDetail 
                     repoName={repoName} 

@@ -5,7 +5,7 @@ import UserUIBlock from "../UI/UserUIBlock/UserUIBlock";
 import LanguageList from "../UI/LanguagesList/LanguageList";
 import styles from "src/components/RepoDetail/RepoDetail.module.css"
 import AppButton from "../UI/AppButton/AppButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 interface RepoDetailProps {
@@ -32,6 +32,9 @@ const RepoDetail: FC<RepoDetailProps> = (props) => {
         languages
     } = props;
 
+    const navigation = useNavigate();
+    const btnClicked = () => navigation('/');
+
     return ( 
         <div className={styles.repoDetail}>
             <h2 className={styles.repoDetail__titleH2}>{repoName}</h2>
@@ -57,13 +60,12 @@ const RepoDetail: FC<RepoDetailProps> = (props) => {
                 <div>{description}</div>
             </div>
             <div className={styles.repoDetail__line}>
-                <Link to="/">
                 <AppButton
                     type="button"
-                    variant="brownOutlineButton">
+                    variant="brownOutlineButton"
+                    onClick={btnClicked}>
                         Go Back
                 </AppButton>
-                </Link>
             </div>
         </div>
     );

@@ -4,10 +4,11 @@ import SearchIcon from "src/components/UI/SearchIcon";
 import { useDebounce } from "src/hooks/useDebounce";
 
 interface AppSearchProps {
-    searchData: (e: string) => void
+    searchData: (e: string) => void,
+    value?: string
 }
 
-const AppSearch: FC<AppSearchProps> = ({searchData}) => {
+const AppSearch: FC<AppSearchProps> = ({searchData, value}) => {
 
     const search = (e: string) => {
         searchData(e);
@@ -24,7 +25,8 @@ const AppSearch: FC<AppSearchProps> = ({searchData}) => {
             <input 
                 type="text" 
                 className={styles.search__input}
-                onChange={inputChanged}/>
+                onChange={inputChanged}
+                defaultValue={value} />
             <div className={styles.search__iconWrapper}>
                 <SearchIcon />
             </div>

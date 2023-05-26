@@ -1,7 +1,8 @@
 import { FC } from "react"
-import styles from "src/components/AppLoader/AppLoader.module.css"
+import styles from "src/components/UI/LoaderApp/LoaderApp.module.css"
 
-const AppLoader: FC = () => {
+
+const LoaderApp: FC = () => {
     return ( 
         <div className={styles.loaderWrapper}>
             <div className={styles.loader}></div>
@@ -9,4 +10,4 @@ const AppLoader: FC = () => {
     );
 }
  
-export default AppLoader;
+export default LoaderApp;

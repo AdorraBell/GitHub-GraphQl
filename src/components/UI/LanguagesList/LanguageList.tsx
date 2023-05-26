@@ -7,17 +7,13 @@ interface LanguageListProps {
 
 const LanguageList: FC<LanguageListProps> = ({languages}) => {
 
-    console.log(languages)
-
     return ( 
-        <div>
-            <ul>
-                {languages.map(language =>
-                    <li key={language.name}>{language.name}</li>
-                )}
-                
-            </ul>
-        </div>
+        <ul>
+            {languages.map(language =>
+                <li key={language.name}>{language.name}</li>
+            )}
+            
+        </ul>
     );
 }
  
