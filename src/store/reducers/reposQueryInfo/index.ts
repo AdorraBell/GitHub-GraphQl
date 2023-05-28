@@ -2,9 +2,10 @@ import { IReposQueryInfo, ReposQueryInfoActions, ReposQueryInfoEnum } from "./ty
 
 const initialState: IReposQueryInfo = {
     error: '',
-    pageNumber: 1,
+    currentCursor: '',
     queryString: '',
-    cursorList: []
+    cursorList: [],
+    pagesQuantity: 1
 }
 
 export default function reposQueryInfoReducer(state = initialState, action: ReposQueryInfoActions) {
@@ -13,10 +14,13 @@ export default function reposQueryInfoReducer(state = initialState, action: Repo
             return {
                     ...state, 
                     error: action.payload.error, 
-                    pageNumber: action.payload.pageNumber,
+                    currentCursor: action.payload.currentCursor,
                     queryString: action.payload.queryString,
-                    cursorList: action.payload.cursorList
-                }
+                    cursorList: action.payload.cursorList,
+                    pagesQuantity: action.payload.pagesQuantity
+                };
+        case ReposQueryInfoEnum.SET_CURSOR: 
+            return {...state, currentCursor: action.payload.currentCursor }
         default: return state;
     }
 }

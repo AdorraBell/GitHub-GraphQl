@@ -4,8 +4,8 @@ import { Languages } from "src/store/reducers/currentUser/types";
 import UserUIBlock from "../UI/UserUIBlock/UserUIBlock";
 import LanguageList from "../UI/LanguagesList/LanguageList";
 import styles from "src/components/RepoDetail/RepoDetail.module.css"
-import AppButton from "../UI/AppButton/AppButton";
-import { Link, useNavigate } from "react-router-dom";
+import ButtonApp from "../UI/ButtonApp/ButtonApp";
+import { useNavigate } from "react-router-dom";
 
 
 interface RepoDetailProps {
@@ -60,12 +60,13 @@ const RepoDetail: FC<RepoDetailProps> = (props) => {
                 <div>{description}</div>
             </div>
             <div className={styles.repoDetail__line}>
-                <AppButton
+                <ButtonApp
                     type="button"
                     variant="brownOutlineButton"
-                    onClick={btnClicked}>
+                    onClick={btnClicked}
+                    id="1" >
                         Go Back
-                </AppButton>
+                </ButtonApp>
             </div>
         </div>
     );

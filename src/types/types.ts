@@ -27,5 +27,5 @@ export interface IRepos {
 
 export interface IEdge {
     cursor: string;
-    node: IRepo
+    node?: IRepo
 }

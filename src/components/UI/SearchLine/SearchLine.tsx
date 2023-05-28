@@ -1,14 +1,14 @@
 import { ChangeEvent, FC } from "react"
-import styles from "src/components/AppSearch/AppSerach.module.css"
+import styles from "src/components/UI/SearchLine/SearchLine.module.css"
 import SearchIcon from "src/components/UI/SearchIcon";
 import { useDebounce } from "src/hooks/useDebounce";
 
-interface AppSearchProps {
+interface SearchLineProps {
     searchData: (e: string) => void,
     value?: string
 }
 
-const AppSearch: FC<AppSearchProps> = ({searchData, value}) => {
+const SearchLine: FC<SearchLineProps> = ({searchData, value}) => {
 
     const search = (e: string) => {
         searchData(e);
@@ -34,4 +34,4 @@ const AppSearch: FC<AppSearchProps> = ({searchData, value}) => {
     );
 }
  
-export default AppSearch;
+export default SearchLine;

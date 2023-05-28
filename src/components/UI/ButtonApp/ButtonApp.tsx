@@ -1,23 +1,26 @@
 import { FC, useEffect, useState } from "react"
-import styles from "src/components/UI/AppButton/AppButton.module.css"
+import styles from "src/components/UI/ButtonApp/ButtonApp.module.css"
+import { useTypedSelector } from "src/hooks/useTypedSelector";
 
 type BtnClassVariants = 'brownButton' | 'brownOutlineButton';
 
 type ButtonTypes = 'button' | 'submit';
 
-interface AppButtonProps {
+interface ButtonAppProps {
     type: ButtonTypes,
-    children: string,
+    children: string | number,
     variant: BtnClassVariants,
-    onClick: (id: number | null) => void,
-    id?: number
+    onClick: (id: number) => void,
+    id: number
 }
 
-const AppButton: FC<AppButtonProps> = ({type, children, variant, onClick, id}) => {
+const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id}) => {
     
     const [btnClass, setBtnClass] = useState('');
     const btnClasses = styles.defaultBtn  +  ' ' + btnClass;
-    const btnClicked = () => onClick(id || null)
+    const activeBtnClasses = styles.defaultBtn  +  ' ' + styles.selectedButton;
+    const btnClicked = () => onClick(id);
+    const {cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
 
     const btnSelectClass = (variant: string) => {
         switch(variant){
@@ -36,11 +39,11 @@ const AppButton: FC<AppButtonProps> = ({type, children, variant, onClick, id}) =
     return ( 
         <button 
             type={type} 
-            className={btnClasses} 
+            className={cursorList[id] === currentCursor ? activeBtnClasses : btnClasses} 
             onClick={btnClicked} >
             {children}
         </button>
     );
 }
  
-export default AppButton;
+export default ButtonApp;

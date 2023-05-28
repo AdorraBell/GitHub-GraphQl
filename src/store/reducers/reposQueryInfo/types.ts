@@ -1,13 +1,19 @@
 
 export interface IReposQueryInfo {
     error: string,
-    pageNumber: number,
+    currentCursor: string,
     queryString: string,
-    cursorList: String[]
+    cursorList: string[],
+    pagesQuantity: number
+}
+
+export interface ICursor {
+    currentCursor: string
 }
 
 export enum ReposQueryInfoEnum {
-    SET_INFO = "SET_INFO"
+    SET_INFO = "SET_INFO",
+    SET_CURSOR = "SET_CURSOR"
 }
 
 export interface SetReposQueryInfoAction {
@@ -15,5 +21,10 @@ export interface SetReposQueryInfoAction {
     payload: IReposQueryInfo;
 }
 
-export type ReposQueryInfoActions = SetReposQueryInfoAction;
+export interface SetReposCursorAction {
+    type: ReposQueryInfoEnum.SET_CURSOR;
+    payload: ICursor;
+}
+
+export type ReposQueryInfoActions = SetReposQueryInfoAction | SetReposCursorAction;
 

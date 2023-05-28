@@ -1,13 +1,13 @@
 import {gql} from "@apollo/client"
 
 export const GET_CURRENT_USER_INFO = gql`
-query { 
+query ($first: Int, $after: String) { 
   viewer {
     login
     name
     avatarUrl
     url
-    repositories(first: 10){
+    repositories (first: $first, after: $after){
       edges {
         cursor
         node {
@@ -17,7 +17,7 @@ query {
           stargazerCount
           updatedAt
           description
-          languages (first: 10){
+          languages (first: 100){
             nodes {
               name
             }

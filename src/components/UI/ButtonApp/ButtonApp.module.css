@@ -4,15 +4,29 @@
     border-radius: 3px;
     font-weight: 600;
     cursor: pointer;
+    margin: 10px;
 }
 
 .brownButton {
     background: #24292f;
     color: #ffffff;
+    border: none;
+}
+
+.brownButton:hover {
+    background: #393d41;
 }
 
 .brownOutlineButton {
     border: 2px solid #24292f;
     color: #24292f;
-    
+}
+
+.brownOutlineButton:hover{
+    background: #393d411b;
+}
+
+.selectedButton {
+    border: 2px solid #6a136a;
+    color: #6a136a;
 }
