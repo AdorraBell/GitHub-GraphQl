@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import {gql} from "@apollo/client";
 
 export const GET_CURRENT_USER_INFO = gql`
 query ($first: Int, $after: String) { 

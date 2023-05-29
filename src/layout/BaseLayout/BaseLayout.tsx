@@ -1,6 +1,6 @@
-import React, { FC } from "react"
-import AppHeader from "src/components/AppHeader/AppHeader"
-import styles from "src/layout/BaseLayout/BaseLayout.module.css"
+import React, { FC } from "react";
+import AppHeader from "src/components/AppHeader/AppHeader";
+import styles from "src/layout/BaseLayout/BaseLayout.module.css";
 
 interface BaseLayoutProps {
     children: React.ReactNode

@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import {gql} from "@apollo/client";
 
 export const SEARCH_REPOS = gql`
 query ($query: String!, $type: SearchType!, $first: Int, $after: String){ 

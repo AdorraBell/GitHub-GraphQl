@@ -1,5 +1,5 @@
 import { FC } from "react";
-import styles from "src/components/UI/UserUIBlock/UserUIBlock.module.css"
+import styles from "./UserUIBlock.module.css";
 
 interface UserUIBlockProps {
     avatarUrl?: string,

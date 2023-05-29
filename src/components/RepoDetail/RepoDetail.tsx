@@ -1,10 +1,10 @@
 
-import { FC } from "react"
+import { FC } from "react";
 import { Languages } from "src/store/reducers/currentUser/types";
-import UserUIBlock from "../UI/UserUIBlock/UserUIBlock";
-import LanguageList from "../UI/LanguagesList/LanguageList";
-import styles from "src/components/RepoDetail/RepoDetail.module.css"
-import ButtonApp from "../UI/ButtonApp/ButtonApp";
+import UserUIBlock from "src/components/UI/UserUIBlock/UserUIBlock";
+import LanguageList from "src/components/UI/LanguagesList/LanguageList";
+import styles from "src/components/RepoDetail/RepoDetail.module.css";
+import ButtonApp from "src/components/UI/ButtonApp/ButtonApp";
 import { useNavigate } from "react-router-dom";
 
 
@@ -64,7 +64,7 @@ const RepoDetail: FC<RepoDetailProps> = (props) => {
                     type="button"
                     variant="brownOutlineButton"
                     onClick={btnClicked}
-                    id="1" >
+                    id={1} >
                         Go Back
                 </ButtonApp>
             </div>

@@ -1,7 +1,7 @@
-import { FC, useEffect } from 'react'
-import './App.css'
-import { useActions } from "src/hooks/useActions"
-import AppRouter from './components/AppRouter/AppRouter'
+import { FC, useEffect } from "react";
+import "src/App.css";
+import { useActions } from "src/hooks/useActions";
+import AppRouter from "src/components/AppRouter/AppRouter";
 
 const App: FC = () => {
 

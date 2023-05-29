@@ -1,5 +1,5 @@
-import { FC } from "react"
-import styles from "src/components/UI/LoaderApp/LoaderApp.module.css"
+import { FC } from "react";
+import styles from "./LoaderApp.module.css";
 
 
 const LoaderApp: FC = () => {

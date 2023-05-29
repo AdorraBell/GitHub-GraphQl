@@ -1,10 +1,10 @@
-import { FC } from "react"
-import { useParams } from "react-router"
-import RepoDetail from "src/components/RepoDetail/RepoDetail"
-import BaseLayout from "src/layout/BaseLayout/BaseLayout"
-import {GET_REPO_DETAILS} from "src/graphQl/query/repoDetails"
-import { useQuery } from "@apollo/client"
-import LoaderApp from "src/components/UI/LoaderApp/LoaderApp"
+import { FC } from "react";
+import { useParams } from "react-router";
+import RepoDetail from "src/components/RepoDetail/RepoDetail";
+import BaseLayout from "src/layout/BaseLayout/BaseLayout";
+import {GET_REPO_DETAILS} from "src/graphQl/query/repoDetails";
+import { useQuery } from "@apollo/client";
+import LoaderApp from "src/components/UI/LoaderApp/LoaderApp";
 
 const DetailPage: FC = () => {
 

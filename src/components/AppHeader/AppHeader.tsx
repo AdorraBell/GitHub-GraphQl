@@ -1,7 +1,7 @@
 import { FC } from "react";
-import styles from "src/components/AppHeader/AppHeader.module.css";
+import styles from "./AppHeader.module.css";
 import { useTypedSelector } from "src/hooks/useTypedSelector";
-import UserUIBlock from "../UI/UserUIBlock/UserUIBlock";
+import UserUIBlock from "src/components/UI/UserUIBlock/UserUIBlock";
 
 const AppHeader: FC = () => {
 

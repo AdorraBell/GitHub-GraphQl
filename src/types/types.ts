@@ -16,11 +16,6 @@ export interface IRepo {
     owner: IUser
 }
 
-// export interface IRepoData {
-//     repo: IRepo,
-//     cursor: string 
-// }
-
 export interface IRepos {
     edges: IEdge[],
 }

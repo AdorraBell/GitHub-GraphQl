@@ -1,5 +1,5 @@
-import { ChangeEvent, FC } from "react"
-import styles from "src/components/UI/SearchLine/SearchLine.module.css"
+import { ChangeEvent, FC } from "react";
+import styles from "./SearchLine.module.css";
 import SearchIcon from "src/components/UI/SearchIcon";
 import { useDebounce } from "src/hooks/useDebounce";
 

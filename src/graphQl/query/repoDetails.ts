@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import {gql} from "@apollo/client";
 
 export const GET_REPO_DETAILS = gql`
 query ($name: String!, $owner: String!) { 

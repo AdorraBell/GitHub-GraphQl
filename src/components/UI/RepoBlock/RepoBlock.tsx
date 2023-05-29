@@ -1,6 +1,6 @@
 import { FC } from "react";
-import styles from "src/components/UI/RepoBlock/RepoBlock.module.css"
-import UserUIBlock from "../UserUIBlock/UserUIBlock";
+import styles from "./RepoBlock.module.css";
+import UserUIBlock from "src/components/UI/UserUIBlock/UserUIBlock";
 import { Link } from "react-router-dom";
 
 interface RepoBlockProps {
@@ -11,13 +11,11 @@ interface RepoBlockProps {
     ownerAvatarUrl?: string,
     linkToOwnerPage: string,
     description?: string,
-    id: number
 }
 
 const RepoBlock: FC<RepoBlockProps> = (props) => {
 
     const {
-        id, 
         name, 
         stargazerCount, 
         updatedAt, 

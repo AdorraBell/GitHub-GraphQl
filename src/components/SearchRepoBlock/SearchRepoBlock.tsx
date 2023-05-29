@@ -1,15 +1,15 @@
-import { FC, useEffect, useState } from "react"
-import { SEARCH_REPOS } from "src/graphQl/query/repos"
-import { useLazyQuery } from "@apollo/client"
-import { useActions } from "src/hooks/useActions"
-import { GET_CURRENT_USER_INFO } from "src/graphQl/query/currentUser"
-import { useTypedSelector } from "src/hooks/useTypedSelector"
-import ListOfRepos from "src/components/UI/ListOfRepos/ListOfRepos"
-import LoaderApp from "src/components/UI/LoaderApp/LoaderApp"
-import SearchLine from "../UI/SearchLine/SearchLine"
-import { GET_REPOS_PAGINATION_INFO } from "src/graphQl/query/reposPaginationInfo"
-import PaginationApp from "../UI/PaginationApp/PaginationApp"
-import { IEdge } from "src/types/types"
+import { FC, useEffect, useState } from "react";
+import {SEARCH_REPOS} from "src/graphQl/query/repos";
+import { useLazyQuery} from "@apollo/client";
+import { useActions } from "src/hooks/useActions";
+import {GET_CURRENT_USER_INFO} from "src/graphQl/query/currentUser";
+import { useTypedSelector } from "src/hooks/useTypedSelector";
+import ListOfRepos from "src/components/UI/ListOfRepos/ListOfRepos";
+import LoaderApp from "src/components/UI/LoaderApp/LoaderApp";
+import SearchLine from "src/components/UI/SearchLine/SearchLine";
+import { GET_REPOS_PAGINATION_INFO } from "src/graphQl/query/reposPaginationInfo";
+import PaginationApp from "src/components/UI/PaginationApp/PaginationApp";
+import { IEdge } from "src/types/types";
 
 const SearchRepoBlock: FC = () => {
 
@@ -20,7 +20,7 @@ const SearchRepoBlock: FC = () => {
     const {queryString, pagesQuantity, cursorList } = useTypedSelector(state => state.reposQueryInfo);
 
     const [searchedLine, setSearchedLine] = useState(sessionStorage.getItem('searchedLine') || '');
-    const [curCursor, setCurCursor] = useState(sessionStorage.getItem('currentCursor') || '');
+    const curCursor = sessionStorage.getItem('currentCursor') || '';
     const searchedLineInSession = sessionStorage.getItem('searchedLine') || '';
     const pageIdInSession = sessionStorage.getItem(('pageId') || '');
 

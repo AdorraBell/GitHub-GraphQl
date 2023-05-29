@@ -1,6 +1,6 @@
-import { FC, useState, useEffect } from "react"
-import ButtonApp from "../ButtonApp/ButtonApp"
-import styles from "src/components/UI/PaginationApp/PaginationApp.module.css"
+import { FC, useState, useEffect } from "react";
+import ButtonApp from "src/components/UI/ButtonApp/ButtonApp";
+import styles from "./PaginationApp.module.css";
 
 interface PaginationAppProps {
     cursorList: String[],
@@ -32,6 +32,7 @@ const PaginationApp: FC<PaginationAppProps> = ({cursorList, pageSelected, queryS
                     key={index}
                     id={index}
                     active={activeBtnId === index}
+                    point={point}
                     >
                     {index+1}
                 </ButtonApp>

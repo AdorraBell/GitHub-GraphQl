@@ -1,4 +1,4 @@
-import {gql} from "@apollo/client"
+import {gql} from "@apollo/client";
 
 export const GET_REPOS_PAGINATION_INFO = gql`
 query ($query: String!, $type: SearchType!, $first: Int, $after: String){ 

@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC } from "react";
 import { Language } from "src/store/reducers/currentUser/types";
 
 interface LanguageListProps {

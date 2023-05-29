@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from "react"
-import styles from "src/components/UI/ButtonApp/ButtonApp.module.css"
-import { useTypedSelector } from "src/hooks/useTypedSelector";
+import { FC, useEffect, useState } from "react";
+import styles from "./ButtonApp.module.css";
 
 type BtnClassVariants = 'brownButton' | 'brownOutlineButton';
 
@@ -12,16 +11,25 @@ interface ButtonAppProps {
     variant: BtnClassVariants,
     onClick: (id: number) => void,
     id: number,
-    active: boolean
+    active?: boolean,
+    point?: String
 }
 
-const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id, active}) => {
+const ButtonApp: FC<ButtonAppProps> = (props) => {
+
+    const {
+        type, 
+        children, 
+        variant, 
+        onClick, 
+        id, 
+        active
+    } = props;
     
     const [btnClass, setBtnClass] = useState('');
     const btnClasses = styles.defaultBtn  +  ' ' + btnClass;
     const activeBtnClasses = styles.defaultBtn  +  ' ' + styles.selectedButton;
     const btnClicked = () => onClick(id);
-    //const {cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
 
 
     const btnSelectClass = (variant: string) => {
