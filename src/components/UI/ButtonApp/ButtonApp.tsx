@@ -11,17 +11,17 @@ interface ButtonAppProps {
     children: string | number,
     variant: BtnClassVariants,
     onClick: (id: number) => void,
-    id: number
+    id: number,
+    active: boolean
 }
 
-const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id}) => {
+const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id, active}) => {
     
     const [btnClass, setBtnClass] = useState('');
     const btnClasses = styles.defaultBtn  +  ' ' + btnClass;
     const activeBtnClasses = styles.defaultBtn  +  ' ' + styles.selectedButton;
     const btnClicked = () => onClick(id);
-    const {cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
-
+    //const {cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
 
 
     const btnSelectClass = (variant: string) => {
@@ -41,7 +41,7 @@ const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id}) =
     return ( 
         <button 
             type={type} 
-            className={(cursorList[id] === currentCursor) ? activeBtnClasses : btnClasses} 
+            className={(active) ? activeBtnClasses : btnClasses} 
             onClick={btnClicked} >
             {children}
         </button>

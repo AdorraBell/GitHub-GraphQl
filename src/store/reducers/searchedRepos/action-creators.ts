@@ -1,5 +1,5 @@
 import { AppDispatch } from "src/store";
-import { CurrentReposActions, ISearchedRepos, SearchedReposActionsEnum } from "./types";
+import { CurrentReposActions, SearchedReposActionsEnum } from "./types";
 import { IRepos } from "src/types/types";
 
 export const ReposListActionCreator = {

@@ -9,7 +9,6 @@ const App: FC = () => {
    const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
    const pageIdInSession = sessionStorage.getItem(('pageId') || '');
    const cursorsListInSession = JSON.parse(sessionStorage.getItem(('cursorsList')) || '[]');
-   
 
    const {setInfo, setCursor} = useActions();
 

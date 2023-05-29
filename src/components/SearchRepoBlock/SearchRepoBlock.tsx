@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react"
-import {SEARCH_REPOS} from "src/graphQl/query/repos"
-import { useLazyQuery} from "@apollo/client"
+import { SEARCH_REPOS } from "src/graphQl/query/repos"
+import { useLazyQuery } from "@apollo/client"
 import { useActions } from "src/hooks/useActions"
-import {GET_CURRENT_USER_INFO} from "src/graphQl/query/currentUser"
+import { GET_CURRENT_USER_INFO } from "src/graphQl/query/currentUser"
 import { useTypedSelector } from "src/hooks/useTypedSelector"
 import ListOfRepos from "src/components/UI/ListOfRepos/ListOfRepos"
 import LoaderApp from "src/components/UI/LoaderApp/LoaderApp"
@@ -17,45 +17,62 @@ const SearchRepoBlock: FC = () => {
 
     const {reposData} = useTypedSelector(state => state.currentUser);
     const {searchedReposData} = useTypedSelector(state => state.searchedRepos);
-    const {queryString, pagesQuantity, cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
+    const {queryString, pagesQuantity, cursorList } = useTypedSelector(state => state.reposQueryInfo);
 
     const [searchedLine, setSearchedLine] = useState(sessionStorage.getItem('searchedLine') || '');
-    const [curCursor, setCurCursor] = useState('');
-
+    const [curCursor, setCurCursor] = useState(sessionStorage.getItem('currentCursor') || '');
     const searchedLineInSession = sessionStorage.getItem('searchedLine') || '';
-    //const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
     const pageIdInSession = sessionStorage.getItem(('pageId') || '');
-    //const cursorsListInSession = JSON.parse(sessionStorage.getItem(('cursorsList')) || '[]');
 
     const [searchLine, searchedRepos] = useLazyQuery(SEARCH_REPOS);
     const [getCurrentUserData, currentUserData] = useLazyQuery(GET_CURRENT_USER_INFO);
     const [getReposPaginationInfo, reposPaginationInfo] = useLazyQuery(GET_REPOS_PAGINATION_INFO);
+    const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
 
+
+    /* Check if the data in the search query existed before the page was updated */
 
     useEffect(() => {
+
+        /* Search line wasn't empty, get query with the same data */
+
         if(searchedLineInSession !== '') {
-            console.log('not cur data')
-            if((pageIdInSession !== null)) {
+            if(pageIdInSession !== null) {
                 pageSelected(Number(pageIdInSession));
             }else {
                 searchData(queryString);
             }
+
+        /* Search line was empty, get current user data */
+
         }else{
-            console.log('cur data')
-            getCurrentUserData({
-                variables: {
-                    first: 10,
-                }
-            })
+            if(currentCursorInSession !== '') {
+                getCurrentUserData({
+                    variables: {
+                        first: 10,
+                        after: currentCursorInSession
+                    }
+                })
+            }else{
+                getCurrentUserData({
+                    variables: {
+                        first: 10,
+                    }
+                })
+            } 
         }
     }, [queryString])
     
-
+    /* */
 
     /* Search data by string from search line, get pagination info */
 
     const searchData = (line: string) => {
         setSearchedLine(line);
+        sessionStorage.setItem('searchedLine', line);
+        sessionStorage.setItem('currentCursor', '');
+        sessionStorage.setItem('pageId', JSON.stringify(0));
+        sessionStorage.setItem('cursorsList', JSON.stringify([]));
         searchLine({
             variables: {
                 query: line,
@@ -69,13 +86,7 @@ const SearchRepoBlock: FC = () => {
                 type: "REPOSITORY",
                 first: 100,
             }
-        })
-        sessionStorage.setItem('searchedLine', line);
-        if(line.length === 0) {
-            sessionStorage.setItem('currentCursor', '');
-            sessionStorage.setItem('pageId', JSON.stringify(0));
-            sessionStorage.setItem('cursorsList', JSON.stringify([]));
-        }
+        }) 
     }
 
     /* */
@@ -83,28 +94,56 @@ const SearchRepoBlock: FC = () => {
     /* Set current page data when page has been selected */
 
     const pageSelected = (id: number) => {
-        if(id === 0) {
-            sessionStorage.setItem('pageId', JSON.stringify(id));
-            searchData(searchedLine);
-            setCursor({currentCursor: ''});
-        } else {
-            const cursor = cursorList[id];
-            if(cursor !== undefined) {
-                searchLine({
-                    variables: {
-                        query: searchedLine,
-                        type: "REPOSITORY",
-                        first: 10,
-                        after: cursor
-                    }
-                });
+        const cursor = cursorList[id];
+
+        /* Page data for current user */
+
+        if(searchedLine === ""){
+            if(id === 0) {
                 sessionStorage.setItem('pageId', JSON.stringify(id));
+                getCurrentUserData({
+                    variables: {
+                        first: 10,
+                    }
+                })
                 setCursor({currentCursor: cursor});
-                sessionStorage.setItem('currentCursor', cursor);
+            }else {
+                if(cursor !== undefined) {
+                    getCurrentUserData({
+                        variables: {
+                            first: 10,
+                            after: cursor
+                        }
+                    })
+                }
+            } 
+
+        /* Page data for searched string */
+
+        }else{
+            if(id === 0) {
+                sessionStorage.setItem('pageId', JSON.stringify(id));
+                searchData(searchedLine);
+                setCursor({currentCursor: cursor});
+            } else {
+                if(cursor !== undefined) {
+                    searchLine({
+                        variables: {
+                            query: searchedLine,
+                            type: "REPOSITORY",
+                            first: 10,
+                            after: cursor
+                        }
+                    });
+                }
             }
         }
-        
+        sessionStorage.setItem('pageId', JSON.stringify(id));
+        setCursor({currentCursor: cursor});
+        sessionStorage.setItem('currentCursor', cursor);
     }
+
+    /* */
 
     /* Set current user data to state, get pagination info */
     useEffect(() => {
@@ -140,6 +179,9 @@ const SearchRepoBlock: FC = () => {
         setPaginationInfo()
     }, [reposPaginationInfo])
 
+
+    /* Set info about pagination */
+
     const setPaginationInfo = () => {
         const paginationInfo = reposPaginationInfo.data?.search; 
         if(paginationInfo){
@@ -154,9 +196,10 @@ const SearchRepoBlock: FC = () => {
             if(currentCursorList.length > 1) {
                 sessionStorage.setItem('cursorsList', JSON.stringify(currentCursorList));
             }
-            
         }
     }
+
+    /* */
 
 
     return ( 
@@ -178,7 +221,8 @@ const SearchRepoBlock: FC = () => {
                 {pagesQuantity > 1 &&
                     <PaginationApp 
                         cursorList={cursorList} 
-                        pageSelected={pageSelected} />  
+                        pageSelected={pageSelected}
+                        queryString={queryString} />  
                 }
                 
         </div>
