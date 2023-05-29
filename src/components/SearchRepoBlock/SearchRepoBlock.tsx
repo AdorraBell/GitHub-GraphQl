@@ -9,19 +9,48 @@ import LoaderApp from "src/components/UI/LoaderApp/LoaderApp"
 import SearchLine from "../UI/SearchLine/SearchLine"
 import { GET_REPOS_PAGINATION_INFO } from "src/graphQl/query/reposPaginationInfo"
 import PaginationApp from "../UI/PaginationApp/PaginationApp"
+import { IEdge } from "src/types/types"
 
 const SearchRepoBlock: FC = () => {
 
     const {setUser, setData, setInfo, setCursor} = useActions();
+
     const {reposData} = useTypedSelector(state => state.currentUser);
     const {searchedReposData} = useTypedSelector(state => state.searchedRepos);
-    const {queryString, pagesQuantity, cursorList} = useTypedSelector(state => state.reposQueryInfo);
-    const [searchedLine, setSearchedLine] = useState('');
+    const {queryString, pagesQuantity, cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
+
+    const [searchedLine, setSearchedLine] = useState(sessionStorage.getItem('searchedLine') || '');
     const [curCursor, setCurCursor] = useState('');
+
+    const searchedLineInSession = sessionStorage.getItem('searchedLine') || '';
+    //const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
+    const pageIdInSession = sessionStorage.getItem(('pageId') || '');
+    //const cursorsListInSession = JSON.parse(sessionStorage.getItem(('cursorsList')) || '[]');
 
     const [searchLine, searchedRepos] = useLazyQuery(SEARCH_REPOS);
     const [getCurrentUserData, currentUserData] = useLazyQuery(GET_CURRENT_USER_INFO);
     const [getReposPaginationInfo, reposPaginationInfo] = useLazyQuery(GET_REPOS_PAGINATION_INFO);
+
+
+    useEffect(() => {
+        if(searchedLineInSession !== '') {
+            console.log('not cur data')
+            if((pageIdInSession !== null)) {
+                pageSelected(Number(pageIdInSession));
+            }else {
+                searchData(queryString);
+            }
+        }else{
+            console.log('cur data')
+            getCurrentUserData({
+                variables: {
+                    first: 10,
+                }
+            })
+        }
+    }, [queryString])
+    
+
 
     /* Search data by string from search line, get pagination info */
 
@@ -41,7 +70,12 @@ const SearchRepoBlock: FC = () => {
                 first: 100,
             }
         })
-        localStorage.setItem('currentCursor', JSON.stringify(line));
+        sessionStorage.setItem('searchedLine', line);
+        if(line.length === 0) {
+            sessionStorage.setItem('currentCursor', '');
+            sessionStorage.setItem('pageId', JSON.stringify(0));
+            sessionStorage.setItem('cursorsList', JSON.stringify([]));
+        }
     }
 
     /* */
@@ -49,31 +83,28 @@ const SearchRepoBlock: FC = () => {
     /* Set current page data when page has been selected */
 
     const pageSelected = (id: number) => {
-        const cursor = cursorList[id];
-        searchLine({
-            variables: {
-                query: searchedLine,
-                type: "REPOSITORY",
-                first: 10,
-                after: cursorList
+        if(id === 0) {
+            sessionStorage.setItem('pageId', JSON.stringify(id));
+            searchData(searchedLine);
+            setCursor({currentCursor: ''});
+        } else {
+            const cursor = cursorList[id];
+            if(cursor !== undefined) {
+                searchLine({
+                    variables: {
+                        query: searchedLine,
+                        type: "REPOSITORY",
+                        first: 10,
+                        after: cursor
+                    }
+                });
+                sessionStorage.setItem('pageId', JSON.stringify(id));
+                setCursor({currentCursor: cursor});
+                sessionStorage.setItem('currentCursor', cursor);
             }
-        });
-        localStorage.setItem('currentCursor', JSON.stringify(cursor));
-        setCurCursor(cursor);
-        setCursor({currentCursor: cursor});
+        }
+        
     }
-
-    /* Search default user data */
-
-    useEffect(() => {
-        getCurrentUserData({
-            variables: {
-                first: 10,
-            }
-        })
-    }, [])
-
-    /* */
 
     /* Set current user data to state, get pagination info */
     useEffect(() => {
@@ -87,8 +118,7 @@ const SearchRepoBlock: FC = () => {
                     first: 100,
                 }
             })
-        }
-        
+        }   
     }, [currentUserData.data])
 
     /* */
@@ -99,7 +129,7 @@ const SearchRepoBlock: FC = () => {
     useEffect(() => {
         const info = searchedRepos.data?.search;   
         if(info){
-            setData(info);
+            setData(info);    
         }  
     }, [searchedRepos.data])
 
@@ -113,8 +143,18 @@ const SearchRepoBlock: FC = () => {
     const setPaginationInfo = () => {
         const paginationInfo = reposPaginationInfo.data?.search; 
         if(paginationInfo){
-            console.log(paginationInfo);
-            setInfo(searchedLine, paginationInfo.edges, curCursor);
+            const edges = paginationInfo.edges;
+            let currentCursorList: string[] = [];
+            edges.forEach((point: IEdge, index: number) => {
+                if((index % 10 === 0) || (index === 0)){
+                    currentCursorList.push(point.cursor);
+                } 
+            });
+            setInfo(searchedLine, currentCursorList, curCursor);
+            if(currentCursorList.length > 1) {
+                sessionStorage.setItem('cursorsList', JSON.stringify(currentCursorList));
+            }
+            
         }
     }
 
@@ -123,7 +163,7 @@ const SearchRepoBlock: FC = () => {
         <div>
             <SearchLine
                 searchData={searchData}
-                value={queryString} />
+                value={searchedLine} />
                 {(currentUserData.loading || searchedRepos.loading) ?
                     <LoaderApp />
                     :

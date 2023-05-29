@@ -22,6 +22,8 @@ const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id}) =
     const btnClicked = () => onClick(id);
     const {cursorList, currentCursor} = useTypedSelector(state => state.reposQueryInfo);
 
+
+
     const btnSelectClass = (variant: string) => {
         switch(variant){
             case 'brownButton': setBtnClass(styles.brownButton);
@@ -39,7 +41,7 @@ const ButtonApp: FC<ButtonAppProps> = ({type, children, variant, onClick, id}) =
     return ( 
         <button 
             type={type} 
-            className={cursorList[id] === currentCursor ? activeBtnClasses : btnClasses} 
+            className={(cursorList[id] === currentCursor) ? activeBtnClasses : btnClasses} 
             onClick={btnClicked} >
             {children}
         </button>

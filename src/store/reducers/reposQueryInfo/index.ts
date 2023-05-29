@@ -1,7 +1,6 @@
 import { IReposQueryInfo, ReposQueryInfoActions, ReposQueryInfoEnum } from "./types";
 
 const initialState: IReposQueryInfo = {
-    error: '',
     currentCursor: '',
     queryString: '',
     cursorList: [],
@@ -13,7 +12,6 @@ export default function reposQueryInfoReducer(state = initialState, action: Repo
         case ReposQueryInfoEnum.SET_INFO :
             return {
                     ...state, 
-                    error: action.payload.error, 
                     currentCursor: action.payload.currentCursor,
                     queryString: action.payload.queryString,
                     cursorList: action.payload.cursorList,

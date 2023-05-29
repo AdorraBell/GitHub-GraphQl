@@ -1,6 +1,5 @@
 import { AppDispatch } from "src/store";
 import { ICursor, IReposQueryInfo, ReposQueryInfoEnum, SetReposCursorAction, SetReposQueryInfoAction } from "./types";
-import { IEdge } from "src/types/types";
 
 
 export const ReposQueryInfoActionCreators = {
@@ -14,15 +13,10 @@ export const ReposQueryInfoActionCreators = {
         payload: cursor
     }),
 
-    setInfo: (queryString: string, fullCursorList: IEdge[], currentCursor: string) => 
+    setInfo: (queryString: string, cursorList: string[], currentCursor: string) => 
     async (dispatch: AppDispatch) => { 
-        let error = '';
-        let cursorList: string[] = []
-        fullCursorList.forEach((point, index) => {
-            if(index % 10 === 0) cursorList.push(point.cursor);
-        });
-        const pagesQuantity = fullCursorList.length; 
-        const info = {error, currentCursor, queryString, cursorList, pagesQuantity};
+        const pagesQuantity = cursorList.length; 
+        const info = {currentCursor, queryString, cursorList, pagesQuantity};
         dispatch(ReposQueryInfoActionCreators.setReposQueryInfo(info));
     },
 

@@ -1,10 +1,9 @@
 
 export interface IReposQueryInfo {
-    error: string,
     currentCursor: string,
     queryString: string,
     cursorList: string[],
-    pagesQuantity: number
+    pagesQuantity: number,
 }
 
 export interface ICursor {
