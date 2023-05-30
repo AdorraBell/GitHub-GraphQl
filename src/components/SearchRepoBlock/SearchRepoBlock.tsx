@@ -10,12 +10,14 @@ import SearchLine from "src/components/UI/SearchLine/SearchLine";
 import { GET_REPOS_PAGINATION_INFO } from "src/graphQl/query/reposPaginationInfo";
 import PaginationApp from "src/components/UI/PaginationApp/PaginationApp";
 import { IEdge } from "src/types/types";
+import ButtonApp from "../UI/ButtonApp/ButtonApp";
+import ErrorBlock from "../UI/ErrorBlock/ErrorBlock";
 
 const SearchRepoBlock: FC = () => {
 
     const {setUser, setData, setInfo, setCursor} = useActions();
 
-    const {reposData} = useTypedSelector(state => state.currentUser);
+    const {reposData } = useTypedSelector(state => state.currentUser);
     const {searchedReposData} = useTypedSelector(state => state.searchedRepos);
     const {queryString, pagesQuantity, cursorList } = useTypedSelector(state => state.reposQueryInfo);
 
@@ -29,6 +31,20 @@ const SearchRepoBlock: FC = () => {
     const [getReposPaginationInfo, reposPaginationInfo] = useLazyQuery(GET_REPOS_PAGINATION_INFO);
     const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
 
+    const [tokenError, setTokenError] = useState('');
+    const [searchError, setSearchError] = useState('');
+
+    /* Function to set another token */
+
+    const tryAnotherToken = () => {
+        const token = prompt('Please, enter your token');
+        if(token !== null){
+            sessionStorage.setItem('token', token);
+            location.reload();
+        }
+    }
+
+    /* */
 
     /* Check if the data in the search query existed before the page was updated */
 
@@ -149,6 +165,7 @@ const SearchRepoBlock: FC = () => {
     useEffect(() => {
         const user = currentUserData.data?.viewer;
         if(user){
+            setTokenError('')
             setUser(user.login, user.avatarUrl, user.url, user.repositories, true);
             getReposPaginationInfo({
                 variables: {
@@ -162,12 +179,23 @@ const SearchRepoBlock: FC = () => {
 
     /* */
 
+    /* Set error if token invalid */
+
+    useEffect(() => {
+        if(currentUserData.error !== undefined) {
+            setTokenError('Token is not valid')
+        }
+    }, [currentUserData.error])
+
+    /* */
+
 
     /* Set searched data to state */
 
     useEffect(() => {
-        const info = searchedRepos.data?.search;   
+        const info = searchedRepos.data?.search;        
         if(info){
+            ((info.edges.length === 0) && (searchedLine.length !== 0)) ? setSearchError("Nothing's found") : setSearchError('');
             setData(info);    
         }  
     }, [searchedRepos.data])
@@ -214,9 +242,26 @@ const SearchRepoBlock: FC = () => {
                     <ListOfRepos 
                         reposList={searchedReposData} />
                     :
-                    reposData.edges !== undefined &&
+                    ((reposData.edges !== undefined) && (searchError.length === 0)) &&
                     <ListOfRepos 
                         reposList={reposData.edges} />
+                }
+                {tokenError.length > 0 &&
+                    <ErrorBlock>
+                        <p>{tokenError}</p>
+                        <ButtonApp 
+                            type="button"
+                            variant="brownOutlineButton"
+                            id={0}
+                            onClick={tryAnotherToken} >
+                            Try another token
+                        </ButtonApp>
+                    </ErrorBlock>
+                }
+                {searchError.length > 0 &&
+                    <ErrorBlock>
+                        <p>{searchError}</p>
+                    </ErrorBlock>
                 }
                 {pagesQuantity > 1 &&
                     <PaginationApp 

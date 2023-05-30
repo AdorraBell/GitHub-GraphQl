@@ -6,13 +6,12 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import { Provider } from "react-redux";
 import { store } from "src/store/index.ts";
 
+
 let token = sessionStorage.getItem(('token') || '');
 
 if((token?.length === 0) || (token === null)) {
   token = prompt('Please, enter your token'); 
-  if(token === null){
-    alert('Please, enter your token')
-  }else{
+  if(token !== null){
     sessionStorage.setItem('token', token);
   }
 }

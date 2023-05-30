@@ -1,0 +1,10 @@
+
+.errorBlock{
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
