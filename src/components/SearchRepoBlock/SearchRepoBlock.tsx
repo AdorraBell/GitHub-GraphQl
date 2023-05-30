@@ -12,12 +12,13 @@ import PaginationApp from "src/components/UI/PaginationApp/PaginationApp";
 import { IEdge } from "src/types/types";
 import ButtonApp from "../UI/ButtonApp/ButtonApp";
 import ErrorBlock from "../UI/ErrorBlock/ErrorBlock";
+import { GET_CURRENT_USER_PAGINATION_INFO } from "src/graphQl/query/currentUserPagination";
 
 const SearchRepoBlock: FC = () => {
 
     const {setUser, setData, setInfo, setCursor} = useActions();
 
-    const {reposData } = useTypedSelector(state => state.currentUser);
+    const {reposData, login} = useTypedSelector(state => state.currentUser);
     const {searchedReposData} = useTypedSelector(state => state.searchedRepos);
     const {queryString, pagesQuantity, cursorList } = useTypedSelector(state => state.reposQueryInfo);
 
@@ -29,6 +30,7 @@ const SearchRepoBlock: FC = () => {
     const [searchLine, searchedRepos] = useLazyQuery(SEARCH_REPOS);
     const [getCurrentUserData, currentUserData] = useLazyQuery(GET_CURRENT_USER_INFO);
     const [getReposPaginationInfo, reposPaginationInfo] = useLazyQuery(GET_REPOS_PAGINATION_INFO);
+    const [getCurUserPaginationInfo, curUserPaginationInfo] = useLazyQuery(GET_CURRENT_USER_PAGINATION_INFO);
     const currentCursorInSession = sessionStorage.getItem('currentCursor') || '';
 
     const [tokenError, setTokenError] = useState('');
@@ -114,12 +116,17 @@ const SearchRepoBlock: FC = () => {
 
         /* Page data for current user */
 
-        if(searchedLine === ""){
+        if(searchedLine.length === 0){
             if(id === 0) {
                 sessionStorage.setItem('pageId', JSON.stringify(id));
                 getCurrentUserData({
                     variables: {
                         first: 10,
+                    }
+                }),
+                getCurUserPaginationInfo({
+                    variables: {
+                        login: login,
                     }
                 })
                 setCursor({currentCursor: cursor});
@@ -165,13 +172,11 @@ const SearchRepoBlock: FC = () => {
     useEffect(() => {
         const user = currentUserData.data?.viewer;
         if(user){
-            setTokenError('')
+            setTokenError('');
             setUser(user.login, user.avatarUrl, user.url, user.repositories, true);
-            getReposPaginationInfo({
+            getCurUserPaginationInfo({
                 variables: {
-                    query: user.login,
-                    type: "USER",
-                    first: 100,
+                    login: user.login,
                 }
             })
         }   
@@ -202,22 +207,34 @@ const SearchRepoBlock: FC = () => {
 
     /* */
 
+    /* Select search pagination info */
 
     useEffect(() => {
-        setPaginationInfo()
+        setPaginationInfo(reposPaginationInfo.data?.search)
     }, [reposPaginationInfo])
+
+    /* */
+
+    /* Select current user pagination info */
+
+    useEffect(() => {
+        console.log(curUserPaginationInfo)
+        setPaginationInfo(curUserPaginationInfo.data?.user.repositories)
+    }, [curUserPaginationInfo])
+
+    /* */
 
 
     /* Set info about pagination */
 
-    const setPaginationInfo = () => {
-        const paginationInfo = reposPaginationInfo.data?.search; 
-        if(paginationInfo){
+    const setPaginationInfo = (data: any) => {
+        const paginationInfo = data; 
+        if(paginationInfo){ 
             const edges = paginationInfo.edges;
             let currentCursorList: string[] = [];
             edges.forEach((point: IEdge, index: number) => {
                 if((index % 10 === 0) || (index === 0)){
-                    currentCursorList.push(point.cursor);
+                    currentCursorList.push(point.cursor);    
                 } 
             });
             setInfo(searchedLine, currentCursorList, curCursor);
@@ -268,8 +285,7 @@ const SearchRepoBlock: FC = () => {
                         cursorList={cursorList} 
                         pageSelected={pageSelected}
                         queryString={queryString} />  
-                }
-                
+                }            
         </div>
     );
 }
